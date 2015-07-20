@@ -1,1 +1,3 @@
-{incl_app, teamcity_ct_hooks, details}.
+{level, details}.
+
+{incl_mods, [teamcity_ct_hooks]}.
