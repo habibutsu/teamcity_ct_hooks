@@ -1,0 +1,1 @@
+{incl_app, teamcity_ct_hooks, details}.

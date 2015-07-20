@@ -1,0 +1,13 @@
+{application, teamcity_ct_hooks, [
+    {description, "Erlang Common Test Hooks for reporting messages in TeamCity"},
+    {vsn, "1"},
+    {modules, [
+        teamcity_ct_hooks
+    ]},
+    {registered, []},
+    {applications, [
+        kernel,
+        stdlib
+    ]},
+    {env, []}
+]}.
