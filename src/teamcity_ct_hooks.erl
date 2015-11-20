@@ -68,10 +68,10 @@ post_end_per_testcase(TestcaseName, Config, Return, CTHState) ->
 %% Internals
 
 tc_blockOpened(BlockName) ->
-    ct:print("#teamcity[blockOpened name='~s']", [BlockName]).
+    ct:print("##teamcity[blockOpened name='~s']", [BlockName]).
 
 tc_blockClosed(BlockName) ->
-    ct:print("#teamcity[blockClosed name='~s']", [BlockName]).
+    ct:print("##teamcity[blockClosed name='~s']", [BlockName]).
 
 tc_testSuiteStarted(SuiteName) ->
     ct:print("##teamcity[testSuiteStarted name='~s']", [SuiteName]).
