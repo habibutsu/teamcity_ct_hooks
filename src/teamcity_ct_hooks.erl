@@ -25,12 +25,12 @@ init(Id, Opts) ->
 
 %% suite
 
-%% @doc Called before init_per_suite is called. 
+%% @doc Called before init_per_suite is called.
 pre_init_per_suite(SuiteName, Config, CTHState) ->
     tc_testSuiteStarted(SuiteName),
     {Config, CTHState}.
 
-%% @doc Called after end_per_suite. 
+%% @doc Called after end_per_suite.
 post_end_per_suite(SuiteName, Config, Return, CTHState) ->
     tc_testSuiteFinished(SuiteName),
     {Return, CTHState}.
@@ -60,9 +60,16 @@ post_end_per_testcase(TestcaseName, Config, Return, CTHState) ->
         {error, Details} ->
             tc_testFailed(TestcaseName, Details);
         ok ->
-            Duration = timer:now_diff(os:timestamp(), CTHState#state.time_start),
-            tc_testFinished(TestcaseName, Duration/1.0e3)
+            % CTHState is common for testcases running in parallel
+            case CTHState#state.time_start of
+                undefined  -> tc_testFinished(TestcaseName);
+                TimeStart ->
+                    Duration = timer:now_diff(os:timestamp(), TimeStart),
+                    tc_testFinished(TestcaseName, Duration/1.0e3)
+            end
     end,
+    % FIXME: for tests running in parallel is needed to distinguish which
+    % testcase is ended
     {Return, CTHState#state{time_start = undefined}}.
 
 %% Internals
@@ -96,6 +103,10 @@ tc_testFailed(TestcaseName, Details) ->
     ct:print(
         "##teamcity[testFailed name='~s' details='~s']",
         [TestcaseName, EscapeDetails6]).
+
+tc_testFinished(TestcaseName) ->
+    ct:print(
+        "##teamcity[testFinished name='~s']", [TestcaseName]).
 
 tc_testFinished(TestcaseName, Duration) ->
     ct:print(
